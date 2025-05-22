@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 interface StyleSelectorProps {
   setPrompt: (prompt: string) => void;
@@ -20,11 +20,16 @@ const StyleSelector: React.FC<StyleSelectorProps> = ({ setPrompt }) => {
     "sci-fi art"
   ];
 
+  // State to control the select element's value
+  const [selectedStyle, setSelectedStyle] = useState("Select a Style");
+
   const handleStyleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectedStyle = e.target.value;
-    if (selectedStyle && selectedStyle !== "Select a Style") {
-      // Append the selected style to the current prompt, ensuring proper formatting
-      setPrompt(prevPrompt => (prevPrompt.trim() ? `${prevPrompt.trim()}, ${selectedStyle}` : selectedStyle));
+    const newStyle = e.target.value;
+    if (newStyle && newStyle !== "Select a Style") {
+      // Append the selected style to the current prompt
+      setPrompt(prevPrompt =>prevPrompt.trim()? `${prevPrompt.trim()}\nFinal style for this image is now "${newStyle}".`: newStyle);
+      // Reset the select element to the default option
+      setSelectedStyle("Select a Style");
     }
   };
 
@@ -40,9 +45,9 @@ const StyleSelector: React.FC<StyleSelectorProps> = ({ setPrompt }) => {
       </div>
       <select
         id="styleSelect"
+        value={selectedStyle} // Controlled component
         onChange={handleStyleChange}
         className="shadow-sm appearance-none border border-gray-300 dark:border-gray-600 rounded-xl w-full py-4 px-4 text-lg text-gray-700 dark:text-gray-200 leading-relaxed focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent bg-gray-50 dark:bg-gray-700 transition-all duration-300"
-        defaultValue="Select a Style"
       >
         {styleOptions.map((style, index) => (
           <option key={index} value={style} disabled={style === "Select a Style"}>

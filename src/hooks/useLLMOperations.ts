@@ -35,6 +35,7 @@ export const useLLMOperations = ({
     const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
     // const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
     const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemma-3-12b-it:generateContent?key=${apiKey}`;
+    // const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemma-3-1b-it:generateContent?key=${apiKey}`;
 
     const response = await fetch(apiUrl, {
       method: 'POST',
@@ -63,7 +64,7 @@ export const useLLMOperations = ({
     setLoadingPrompt(true);
 
     try {
-      const llmPrompt = `As a creative prompt engineer for an AI image generator, expand and make the following short description more detailed, imaginative, and suitable for generating a visually rich image. Focus on adding descriptive adjectives, settings, lighting, and mood. Do not include any conversational text, just the enhanced prompt.
+      const llmPrompt = `As a creative prompt engineer for an AI image generator, expand and make the following short description more detailed, imaginative, and suitable for generating a visually rich image. Focus on adding descriptive adjectives, settings, lighting, and mood. Do not add any style related keywords. Do not include any conversational text, just the enhanced prompt.
       
       Original prompt: "${prompt}"
 
@@ -121,7 +122,7 @@ export const useLLMOperations = ({
     setLoadingInspireMe(true);
 
     try {
-      const llmPrompt = `Generate a single, unique, and creative image generation prompt, Maximum generated prompt length including white spaces must be less than: "${500}". This prompt should be visually rich and evocative, covering a vast and unpredictable range of themes, styles, and subjects. Do not include any conversational text, just the prompt itself.`;
+      const llmPrompt = `Generate a single, image generation prompt, Maximum generated prompt length including white spaces must be less than: "${500}". Do not include any conversational text, just the prompt itself.`;
 
       const inspiredPrompt = await callLLMAPI(llmPrompt);
       setPrompt(inspiredPrompt.trim());
