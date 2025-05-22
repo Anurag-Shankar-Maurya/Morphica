@@ -10,7 +10,7 @@ const Header: React.FC = () => {
       <div className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 h-3"></div>
       <div className="flex justify-between items-center p-6 md:p-8">
         <h1 className="text-3xl md:text-4xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-400 dark:to-purple-400">
-          AI Image Creator
+          MORPHIC: AI IMAGE GENERATOR
         </h1>
         <button
           onClick={toggleTheme}

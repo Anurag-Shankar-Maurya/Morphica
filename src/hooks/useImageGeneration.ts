@@ -21,7 +21,7 @@ export const useImageGeneration = () => {
             role: "user",
             parts: [
               {
-                text: prompt
+                text: "1:1 image for: "+prompt+"\nAvoid including (Negatice Prompt): "+negativePrompt
               }
             ]
           }
