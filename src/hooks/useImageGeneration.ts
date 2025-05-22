@@ -7,20 +7,33 @@ export const useImageGeneration = () => {
   const [loadingImage, setLoadingImage] = useState(false);
   const [error, setError] = useState('');
   const [showFullScreen, setShowFullScreen] = useState(false);
-  
+
   const generateImage = async () => {
     setImageUrl('');
     setLoadingImage(true);
     setError('');
 
     try {
+      // Payload matching cURL command, focusing on image output
       const payload = {
-        instances: { prompt: prompt },
-        parameters: { "sampleCount": 1 }
+        contents: [
+          {
+            role: "user",
+            parts: [
+              {
+                text: prompt
+              }
+            ]
+          }
+        ],
+        generationConfig: {
+          responseModalities: ["TEXT", "IMAGE"],
+        }
       };
 
-      const apiKey = import.meta.env.VITE_IMAGEN_API_KEY;
-      const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-002:predict?key=${apiKey}`;
+      const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+      const modelId = "gemini-2.0-flash-preview-image-generation";
+      const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${modelId}:generateContent?key=${apiKey}`;
 
       const response = await fetch(apiUrl, {
         method: 'POST',
@@ -33,14 +46,34 @@ export const useImageGeneration = () => {
         throw new Error(errorData.error?.message || `HTTP error! status: ${response.status}`);
       }
 
-      const result = await response.json();
+      // Parse JSON response
+      const data = await response.json();
+      let imageFound = false;
 
-      if (result.predictions && result.predictions.length > 0 && result.predictions[0].bytesBase64Encoded) {
-        const base64Image = result.predictions[0].bytesBase64Encoded;
-        setImageUrl(`data:image/png;base64,${base64Image}`);
-      } else {
+      // Check for image in candidates
+      if (
+        data.candidates &&
+        data.candidates[0] &&
+        data.candidates[0].content &&
+        data.candidates[0].content.parts
+      ) {
+        const parts = data.candidates[0].content.parts;
+
+        // Look only for image data, ignore text
+        for (const part of parts) {
+          if (part.inlineData && part.inlineData.mimeType === 'image/png') {
+            const base64Image = part.inlineData.data;
+            setImageUrl(`data:image/png;base64,${base64Image}`);
+            imageFound = true;
+            break;
+          }
+        }
+      }
+
+      if (!imageFound) {
         setError('No image data received from the API.');
       }
+
     } catch (err) {
       console.error('Error generating image:', err);
       setError(`Failed to generate image: ${err instanceof Error ? err.message : String(err)}`);
