@@ -13,7 +13,6 @@ export const useLLMOperations = ({
   setNegativePrompt, 
   setError 
 }: LLMOperationsProps) => {
-  // State for LLM operations
   const [suggestedPrompts, setSuggestedPrompts] = useState<string[]>([]);
   const [generatedStory, setGeneratedStory] = useState('');
   const [loadingPrompt, setLoadingPrompt] = useState(false);
@@ -22,19 +21,18 @@ export const useLLMOperations = ({
   const [loadingInspireMe, setLoadingInspireMe] = useState(false);
   const [loadingStory, setLoadingStory] = useState(false);
   
-  // Helper function to clear LLM-related states
   const clearLLMStates = useCallback(() => {
     setError('');
     setSuggestedPrompts([]);
     setGeneratedStory('');
   }, [setError]);
   
-  // Helper function to make LLM API calls
-  const callLLMAPI = useCallback(async (prompt: string, apiKey = "") => {
+  const callLLMAPI = useCallback(async (prompt: string) => {
     let chatHistory = [];
     chatHistory.push({ role: "user", parts: [{ text: prompt }] });
 
     const payload = { contents: chatHistory };
+    const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
     const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
 
     const response = await fetch(apiUrl, {
@@ -58,10 +56,7 @@ export const useLLMOperations = ({
     
     throw new Error('No valid response received from the LLM.');
   }, []);
-  
-  /**
-   * Asynchronously enhances the current positive prompt using the Gemini API (LLM).
-   */
+
   const enhancePrompt = async () => {
     clearLLMStates();
     setLoadingPrompt(true);
@@ -84,10 +79,7 @@ export const useLLMOperations = ({
       setLoadingPrompt(false);
     }
   };
-  
-  /**
-   * Asynchronously suggests related prompts using the Gemini API (LLM).
-   */
+
   const suggestPrompts = async () => {
     clearLLMStates();
     setLoadingSuggestions(true);
@@ -105,10 +97,7 @@ export const useLLMOperations = ({
       setLoadingSuggestions(false);
     }
   };
-  
-  /**
-   * Asynchronously generates a negative prompt using the Gemini API (LLM).
-   */
+
   const generateNegativePrompt = async () => {
     clearLLMStates();
     setLoadingNegativePrompt(true);
@@ -125,10 +114,7 @@ export const useLLMOperations = ({
       setLoadingNegativePrompt(false);
     }
   };
-  
-  /**
-   * Asynchronously generates an inspiring prompt using the Gemini API (LLM).
-   */
+
   const inspireMe = async () => {
     clearLLMStates();
     setLoadingInspireMe(true);
@@ -145,10 +131,7 @@ export const useLLMOperations = ({
       setLoadingInspireMe(false);
     }
   };
-  
-  /**
-   * Asynchronously generates a short story based on the prompt using the Gemini API (LLM).
-   */
+
   const generateStory = async () => {
     clearLLMStates();
     setLoadingStory(true);
@@ -165,8 +148,7 @@ export const useLLMOperations = ({
       setLoadingStory(false);
     }
   };
-  
-  // Determine if any LLM operation is in progress
+
   const anyLLMLoading = loadingPrompt || loadingSuggestions || loadingNegativePrompt || loadingInspireMe || loadingStory;
   
   return {
