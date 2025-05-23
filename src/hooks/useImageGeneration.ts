@@ -86,7 +86,17 @@ export const useImageGeneration = () => {
     if (imageUrl) {
       const link = document.createElement('a');
       link.href = imageUrl;
-      link.download = 'generated_image.png';
+
+      // Generate filename with timestamp
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = String(now.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
+      const day = String(now.getDate()).padStart(2, '0');
+      const hours = String(now.getHours()).padStart(2, '0');
+      const minutes = String(now.getMinutes()).padStart(2, '0');
+      const seconds = String(now.getSeconds()).padStart(2, '0');
+
+      link.download = `morphica_${year}-${month}-${day}_${hours}-${minutes}-${seconds}.png`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
