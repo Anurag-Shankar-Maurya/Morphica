@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Download, Maximize, X } from 'lucide-react';
+import ReactDOM from 'react-dom';
 
 interface ImageDisplayProps {
   imageUrl: string;
@@ -16,6 +17,13 @@ const ImageDisplay: React.FC<ImageDisplayProps> = ({
   setShowFullScreen,
   setError
 }) => {
+  const [portalContainer, setPortalContainer] = useState<HTMLElement | null>(null);
+
+  useEffect(() => {
+    // Ensure document.body is accessed only on the client side
+    setPortalContainer(document.body);
+  }, []);
+
   return (
     <div className="mt-8 text-center animate-fadeIn">
       <h2 className="text-xl font-semibold text-gray-800 dark:text-white mb-6 flex items-center justify-center">
@@ -52,26 +60,32 @@ const ImageDisplay: React.FC<ImageDisplayProps> = ({
       </div>
       
       {/* Fullscreen modal */}
-      {showFullScreen && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-90 p-4 animate-fadeIn"
-          onClick={() => setShowFullScreen(false)}
-        >
-          <div className="relative max-w-full max-h-full flex items-center justify-center">
-            <img 
-              src={imageUrl} 
-              alt="Full Screen Generated Image" 
-              className="max-w-full max-h-full object-contain rounded-lg shadow-2xl animate-scaleIn" 
-            />
-            <button
-              onClick={(e) => { e.stopPropagation(); setShowFullScreen(false); }}
-              className="absolute top-4 right-4 p-2 rounded-full bg-white dark:bg-gray-700 text-gray-800 dark:text-white shadow-lg hover:scale-110 transform transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              aria-label="Close full screen"
+      {showFullScreen && portalContainer && ReactDOM.createPortal(
+        (
+          <div
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-90 p-4 animate-fadeIn"
+            onClick={() => setShowFullScreen(false)} // Click on backdrop closes modal
+          >
+            <div 
+              className="relative max-w-full max-h-full flex items-center justify-center"
+              onClick={(e) => e.stopPropagation()} // Prevent backdrop click when clicking on image container
             >
-              <X size={20} />
-            </button>
+              <img
+                src={imageUrl}
+                alt="Full Screen Generated Image"
+                className="max-w-full max-h-full object-contain rounded-lg shadow-2xl animate-scaleIn"
+              />
+              <button
+                onClick={() => setShowFullScreen(false)} // Explicit close button
+                className="absolute top-4 right-4 p-2 rounded-full bg-white dark:bg-gray-700 text-gray-800 dark:text-white shadow-lg hover:scale-110 transform transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                aria-label="Close full screen"
+              >
+                <X size={20} />
+              </button>
+            </div>
           </div>
-        </div>
+        ),
+        portalContainer
       )}
     </div>
   );
