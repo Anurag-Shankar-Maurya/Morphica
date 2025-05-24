@@ -1,35 +1,40 @@
 import React, { useState } from 'react';
 
 interface StyleSelectorProps {
-  setPrompt: (prompt: string) => void;
+  styleSelected: string;
+  setStyleSelected: (style: string) => void;
 }
 
-const StyleSelector: React.FC<StyleSelectorProps> = ({ setPrompt }) => {
+const StyleSelector: React.FC<StyleSelectorProps> = ({ styleSelected, setStyleSelected }) => {
   // Predefined list of artistic styles for the dropdown
   const styleOptions = [
     "Select a Style", // Default option
-    "oil painting",
-    "cyberpunk",
-    "watercolor",
-    "photorealistic",
-    "anime style",
-    "pixel art",
-    "surrealism",
-    "baroque",
-    "impressionistic",
-    "sci-fi art"
+    "Oil Painting",
+    "Watercolor",
+    "Photorealistic",
+    "Anime Style",
+    "Impressionistic",
+    "Abstract",
+    "Pop Art",
+    "Renaissance",
+    "Minimalist",
+    "Street Art",
+    "Art Nouveau",
+    "Cubism",
+    "Surrealism",
+    "Pixel Art",
+    "Cyberpunk",
+    "Baroque",
+    "Art Deco",
+    "Gothic",
+    "Vintage Poster"
   ];
-
-  // State to control the select element's value
-  const [selectedStyle, setSelectedStyle] = useState("Select a Style");
 
   const handleStyleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newStyle = e.target.value;
     if (newStyle && newStyle !== "Select a Style") {
-      // Append the selected style to the current prompt
-      setPrompt(prevPrompt =>prevPrompt.trim()? `${prevPrompt.trim()}\nFinal style for this image is now "${newStyle}".`: newStyle);
-      // Reset the select element to the default option
-      setSelectedStyle("Select a Style");
+      // Set the selected style directly
+      setStyleSelected(newStyle);
     }
   };
 
@@ -45,7 +50,7 @@ const StyleSelector: React.FC<StyleSelectorProps> = ({ setPrompt }) => {
       </div>
       <select
         id="styleSelect"
-        value={selectedStyle} // Controlled component
+        value={styleSelected || "Select a Style"} // Controlled component
         onChange={handleStyleChange}
         className="shadow-sm appearance-none border border-gray-300 dark:border-gray-600 rounded-xl w-full py-4 px-4 text-lg text-gray-700 dark:text-gray-200 leading-relaxed focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent bg-gray-50 dark:bg-gray-700 transition-all duration-300"
       >

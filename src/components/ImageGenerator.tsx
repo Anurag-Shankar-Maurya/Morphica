@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import PromptInput from './PromptInput';
 import NegativePromptInput from './NegativePromptInput';
 import StyleSelector from './StyleSelector';
@@ -27,8 +27,9 @@ const ImageGenerator: React.FC = () => {
     setPrompt, 
     negativePrompt, 
     setNegativePrompt,
+    styleSelected,
+    setStyleSelected,
     imageUrl, 
-    setImageUrl,
     loadingImage,
     error,
     setError,
@@ -37,6 +38,7 @@ const ImageGenerator: React.FC = () => {
     showFullScreen,
     setShowFullScreen
   } = useImageGeneration();
+
   
   // LLM operations state and functions
   const {
@@ -127,7 +129,7 @@ const ImageGenerator: React.FC = () => {
             generateImage={generateImage}
           />
           
-          <StyleSelector setPrompt={setPrompt} />
+          <StyleSelector styleSelected={styleSelected} setStyleSelected={setStyleSelected} />
           
           {error && <ErrorMessage error={error} />}
           

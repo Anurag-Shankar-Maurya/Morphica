@@ -3,6 +3,7 @@ import { useState } from 'react';
 export const useImageGeneration = () => {
   const [prompt, setPrompt] = useState('');
   const [negativePrompt, setNegativePrompt] = useState('');
+  const [styleSelected, setStyleSelected] = useState(''); // Added state for style
   const [imageUrl, setImageUrl] = useState('');
   const [loadingImage, setLoadingImage] = useState(false);
   const [error, setError] = useState('');
@@ -21,7 +22,7 @@ export const useImageGeneration = () => {
             role: "user",
             parts: [
               {
-                text: "1:1 image for: "+prompt+"\nAvoid including (Negatice Prompt): "+negativePrompt
+                text: "1:1 image for: "+prompt+"\nAvoid including (Negatice Prompt): "+negativePrompt + (styleSelected ? "\nFinal style for this image is now \"" + styleSelected + "\"." : "")
               }
             ]
           }
@@ -108,6 +109,8 @@ export const useImageGeneration = () => {
     setPrompt,
     negativePrompt,
     setNegativePrompt,
+    styleSelected,
+    setStyleSelected,
     imageUrl,
     setImageUrl,
     loadingImage,
