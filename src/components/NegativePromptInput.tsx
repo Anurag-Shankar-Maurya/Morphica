@@ -23,7 +23,7 @@ const NegativePromptInput: React.FC<NegativePromptInputProps> = ({
           <label htmlFor="negativePrompt" className="block text-base font-semibold text-gray-700 dark:text-gray-300 cursor-help">
             Negative Prompt (elements to exclude):
           </label>
-          <span className="absolute hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2 z-10 bottom-full left-1/2 transform -translate-x-1/2 mb-2 whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          <span className="absolute hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2 z-10 bottom-full left-1/2 transform -translate-x-1/3 mb-2 whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-300">
             Specify elements or qualities you want to avoid in the generated image.
           </span>
         </div>

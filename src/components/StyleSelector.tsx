@@ -39,7 +39,7 @@ const StyleSelector: React.FC<StyleSelectorProps> = ({ setPrompt }) => {
         <label htmlFor="styleSelect" className="block text-base font-semibold mb-2 text-gray-700 dark:text-gray-300 cursor-help">
           Select an Artistic Style:
         </label>
-        <span className="absolute hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2 z-10 bottom-full left-1/2 transform -translate-x-1/2 mb-2 whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+        <span className="absolute hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2 z-10 bottom-full left-1/4 transform -translate-x-1/2 mb-2 whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-300">
           Choose a visual style to apply to the generated image.
         </span>
       </div>
