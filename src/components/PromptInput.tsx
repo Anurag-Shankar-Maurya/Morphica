@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useImperativeHandle, forwardRef } from 'react';
 import { Sparkles, X } from 'lucide-react';
 
 interface PromptInputProps {
@@ -12,7 +12,7 @@ interface PromptInputProps {
   clearPrompt: () => void;
 }
 
-const PromptInput: React.FC<PromptInputProps> = ({
+const PromptInput = forwardRef<HTMLTextAreaElement, PromptInputProps>(({
   prompt,
   setPrompt,
   maxLength,
@@ -21,7 +21,11 @@ const PromptInput: React.FC<PromptInputProps> = ({
   loadingImage,
   inspireMe,
   clearPrompt
-}) => {
+}, ref) => {
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  useImperativeHandle(ref, () => textareaRef.current as HTMLTextAreaElement);
+
   return (
     <div className="mb-6 animate-fadeIn">
       <div className="flex items-center justify-between mb-2">
@@ -61,6 +65,7 @@ const PromptInput: React.FC<PromptInputProps> = ({
       </div>
       <div className="relative">
         <textarea
+          ref={textareaRef}
           id="prompt"
           className="shadow-sm appearance-none border border-gray-300 dark:border-gray-600 rounded-xl w-full py-4 px-4 text-lg text-gray-700 dark:text-gray-200 leading-relaxed focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent h-32 resize-none bg-gray-50 dark:bg-gray-700 transition-all duration-300"
           placeholder="e.g., A vibrant fantasy forest with glowing mushrooms and a hidden waterfall"
@@ -74,6 +79,6 @@ const PromptInput: React.FC<PromptInputProps> = ({
       </div>
     </div>
   );
-};
+});
 
 export default PromptInput;

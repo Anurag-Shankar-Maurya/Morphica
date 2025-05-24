@@ -20,6 +20,7 @@ const ImageGenerator: React.FC = () => {
   const suggestedPromptsRef = useRef<HTMLDivElement>(null);
   const generatedStoryRef = useRef<HTMLDivElement>(null);
   const generatedImageRef = useRef<HTMLDivElement>(null);
+  const promptInputRef = useRef<HTMLTextAreaElement>(null);
   
   // Image generation state and functions
   const { 
@@ -89,6 +90,13 @@ const ImageGenerator: React.FC = () => {
     }
   }, [imageUrl]);
 
+  const handleSuggestedPromptSelect = () => {
+    if (promptInputRef.current) {
+      promptInputRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      promptInputRef.current.focus();
+    }
+  };
+
   return (
     <div className="flex flex-col items-center justify-center w-full">
       <div className="w-full max-w-3xl bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden transform transition-all duration-300 hover:shadow-2xl">
@@ -96,6 +104,7 @@ const ImageGenerator: React.FC = () => {
         
         <div className="p-6 md:p-8">
           <PromptInput 
+            ref={promptInputRef}
             prompt={prompt}
             setPrompt={setPrompt}
             maxLength={MAX_PROMPT_LENGTH}
@@ -139,6 +148,7 @@ const ImageGenerator: React.FC = () => {
                 suggestedPrompts={suggestedPrompts} 
                 setPrompt={setPrompt} 
                 setSuggestedPrompts={setSuggestedPrompts} 
+                onSelect={handleSuggestedPromptSelect}
               />
             </div>
           )}

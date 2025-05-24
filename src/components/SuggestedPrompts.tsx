@@ -4,12 +4,14 @@ interface SuggestedPromptsProps {
   suggestedPrompts: string[];
   setPrompt: (prompt: string) => void;
   setSuggestedPrompts: (prompts: string[]) => void;
+  onSelect?: () => void;
 }
 
 const SuggestedPrompts: React.FC<SuggestedPromptsProps> = ({
   suggestedPrompts,
   setPrompt,
-  setSuggestedPrompts
+  setSuggestedPrompts,
+  onSelect
 }) => {
   return (
     <div className="mt-8 animate-fadeIn">
@@ -25,6 +27,9 @@ const SuggestedPrompts: React.FC<SuggestedPromptsProps> = ({
             onClick={() => {
               setPrompt(suggestion);
               setSuggestedPrompts([]);
+              if (onSelect) {
+                onSelect();
+              }
             }}
             className="bg-gradient-to-r from-green-50 to-teal-50 dark:from-green-900/20 dark:to-teal-900/20 hover:from-green-100 hover:to-teal-100 dark:hover:from-green-900/30 dark:hover:to-teal-900/30 text-gray-800 dark:text-gray-200 text-left py-3 px-4 rounded-xl transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-green-400 dark:focus:ring-green-500 shadow-sm hover:shadow-md transform hover:-translate-y-1 text-base"
           >
