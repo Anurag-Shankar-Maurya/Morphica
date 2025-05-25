@@ -37,7 +37,9 @@ const ImageGenerator: React.FC = () => {
     generateImage,
     handleDownloadImage,
     showFullScreen,
-    setShowFullScreen
+    setShowFullScreen,
+    uploadedImages,
+    setUploadedImages
   } = useImageGeneration();
 
   
@@ -113,6 +115,8 @@ const ImageGenerator: React.FC = () => {
             loadingImage={loadingImage}
             inspireMe={inspireMe}
             clearPrompt={clearPrompt}
+            uploadedImages={uploadedImages}
+            setUploadedImages={setUploadedImages}
           />
           
           <NegativePromptInput 
@@ -136,6 +140,7 @@ const ImageGenerator: React.FC = () => {
             generateNegativePrompt={generateNegativePrompt}
             generateStory={generateStory}
             generateImage={generateImage}
+            uploadedImages={uploadedImages}
           />
           
           <StyleSelector styleSelected={styleSelected} setStyleSelected={setStyleSelected} />

@@ -14,6 +14,7 @@ interface ActionsPanelProps {
   generateNegativePrompt: () => Promise<void>;
   generateStory: () => Promise<void>;
   generateImage: () => Promise<void>;
+  uploadedImages: string[];
 }
 
 const ActionsPanel: React.FC<ActionsPanelProps> = ({
@@ -28,7 +29,8 @@ const ActionsPanel: React.FC<ActionsPanelProps> = ({
   suggestPrompts,
   generateNegativePrompt,
   generateStory,
-  generateImage
+  generateImage,
+  uploadedImages
 }) => {
   return (
     <div className="mb-8 animate-fadeIn">
@@ -89,7 +91,7 @@ const ActionsPanel: React.FC<ActionsPanelProps> = ({
       
       <button
         onClick={generateImage}
-        disabled={loadingImage || anyLLMLoading || !prompt.trim()}
+        disabled={loadingImage || anyLLMLoading || (!prompt.trim() && uploadedImages.length === 0)}
         className="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-bold py-4 px-6 rounded-xl shadow-xl hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300 ease-in-out w-full disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none text-xl tracking-wide flex items-center justify-center"
       >
         {loadingImage ? (

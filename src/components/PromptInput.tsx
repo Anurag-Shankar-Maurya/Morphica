@@ -10,6 +10,8 @@ interface PromptInputProps {
   loadingImage: boolean;
   inspireMe: () => Promise<void>;
   clearPrompt: () => void;
+  uploadedImages: string[];
+  setUploadedImages: (images: string[]) => void;
 }
 
 const PromptInput = forwardRef<HTMLTextAreaElement, PromptInputProps>(({
@@ -20,7 +22,9 @@ const PromptInput = forwardRef<HTMLTextAreaElement, PromptInputProps>(({
   anyLLMLoading,
   loadingImage,
   inspireMe,
-  clearPrompt
+  clearPrompt,
+  uploadedImages,
+  setUploadedImages
 }, ref) => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -73,6 +77,58 @@ const PromptInput = forwardRef<HTMLTextAreaElement, PromptInputProps>(({
           onChange={(e) => setPrompt(e.target.value)}
           maxLength={maxLength}
         ></textarea>
+        {/* Image upload button positioned just above the character count */}
+        <div className="absolute bottom-8 right-3 flex items-center space-x-2">
+          <label
+            htmlFor="image-upload"
+            className="cursor-pointer p-1 rounded-md hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+            title="Upload images"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6 text-gray-600 dark:text-gray-300"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V7M16 3v4M8 3v4m-5 4h18"
+              />
+            </svg>
+            <span className="sr-only">Upload images</span>
+          </label>
+          <input
+            id="image-upload"
+            type="file"
+            accept="image/*"
+            multiple
+            className="hidden"
+            onChange={async (e) => {
+              const files = e.target.files;
+              if (!files) return;
+              const base64Images: string[] = [];
+              for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                const base64 = await new Promise<string>((resolve, reject) => {
+                  const reader = new FileReader();
+                  reader.readAsDataURL(file);
+                  reader.onload = () => {
+                    const result = reader.result as string;
+                    // Remove the data URL prefix to get only base64 string
+                    const base64String = result.split(',')[1];
+                    resolve(base64String);
+                  };
+                  reader.onerror = (error) => reject(error);
+                });
+                base64Images.push(base64);
+              }
+              setUploadedImages(base64Images);
+            }}
+          />
+        </div>
         <div className="absolute bottom-3 right-3 text-sm text-gray-500 dark:text-gray-400">
           {prompt.length}/{maxLength}
         </div>

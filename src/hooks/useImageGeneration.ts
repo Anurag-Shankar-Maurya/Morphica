@@ -9,6 +9,9 @@ export const useImageGeneration = () => {
   const [error, setError] = useState('');
   const [showFullScreen, setShowFullScreen] = useState(false);
 
+  // New state to hold uploaded images in base64 format
+  const [uploadedImages, setUploadedImages] = useState<string[]>([]);
+
   const generateImage = async () => {
     setImageUrl('');
     setLoadingImage(true);
@@ -23,7 +26,14 @@ export const useImageGeneration = () => {
             parts: [
               {
                 text: prompt + (negativePrompt ? "\nNegative Prompt: " + negativePrompt : "") + (styleSelected ? "\nFinal style for this image is now \"" + styleSelected + "\"." : "")
-              }
+              },
+              // Add uploaded images as inlineData parts
+              ...uploadedImages.map((base64Image) => ({
+                inlineData: {
+                  mimeType: "image/png",
+                  data: base64Image
+                }
+              }))
             ]
           }
         ],
@@ -119,6 +129,8 @@ export const useImageGeneration = () => {
     generateImage,
     handleDownloadImage,
     showFullScreen,
-    setShowFullScreen
+    setShowFullScreen,
+    uploadedImages,
+    setUploadedImages
   };
 };
