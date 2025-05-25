@@ -64,7 +64,7 @@ export const useLLMOperations = ({
     setLoadingPrompt(true);
 
     try {
-      const llmPrompt = `As a creative prompt engineer for an AI image generator, expand and make the following short description more detailed, imaginative, and suitable for generating a visually rich image. Focus on adding descriptive adjectives, settings, lighting, and mood. Do not add any style related keywords. Do not include any conversational text, just the enhanced prompt.
+      const llmPrompt = `As a creative prompt engineer for an AI image generator, expand and make the following short description more detailed, and suitable for generating a visually rich image. Focus on adding descriptive adjectives, settings, lighting, and mood. Do not add any style related keywords. Do not include any conversational text, just the enhanced prompt.
       
       Original prompt: "${prompt}"
 
@@ -87,7 +87,7 @@ export const useLLMOperations = ({
     setLoadingSuggestions(true);
 
     try {
-      const llmPrompt = `Given the image generation prompt: "${prompt}", Maximum generated prompt length including white spaces must be less than: "${500}", generate 3 distinct and creative alternative or related prompts that could lead to interesting AI-generated images. Each prompt should be concise and visually descriptive. List them, one per line, without any numbering or introductory/concluding phrases.`;
+      const llmPrompt = `Given the image generation prompt: "${prompt}", Maximum generated prompt length including white spaces must be less than: "${1500}", generate 3 distinct and creative alternative or related prompts that could lead to interesting AI-generated images. Each prompt should be concise and visually descriptive. List them, one per line, without any numbering or introductory/concluding phrases.`;
 
       const rawSuggestions = await callLLMAPI(llmPrompt);
       const parsedSuggestions = rawSuggestions.split('\n').map(s => s.trim()).filter(s => s.length > 0);

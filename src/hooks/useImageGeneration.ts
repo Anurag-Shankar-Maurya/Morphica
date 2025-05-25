@@ -22,7 +22,7 @@ export const useImageGeneration = () => {
             role: "user",
             parts: [
               {
-                text: "1:1 image for: "+prompt+"\nAvoid including (Negatice Prompt): "+negativePrompt + (styleSelected ? "\nFinal style for this image is now \"" + styleSelected + "\"." : "")
+                text: prompt + (negativePrompt ? "\nNegative Prompt: " + negativePrompt : "") + (styleSelected ? "\nFinal style for this image is now \"" + styleSelected + "\"." : "")
               }
             ]
           }

@@ -9,6 +9,7 @@ const StyleSelector: React.FC<StyleSelectorProps> = ({ styleSelected, setStyleSe
   // Predefined list of artistic styles for the dropdown
   const styleOptions = [
     "Select a Style", // Default option
+    "None", // Option to clear/unselect style
     "Oil Painting",
     "Watercolor",
     "Photorealistic",
@@ -47,10 +48,22 @@ const StyleSelector: React.FC<StyleSelectorProps> = ({ styleSelected, setStyleSe
 
   const handleStyleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newStyle = e.target.value;
-    if (newStyle && newStyle !== "Select a Style") {
+    
+    if (newStyle === "None") {
+      // Clear the selected style by setting it to empty string
+      setStyleSelected("");
+    } else if (newStyle && newStyle !== "Select a Style") {
       // Set the selected style directly
       setStyleSelected(newStyle);
     }
+  };
+
+  // Determine what value to show in the select
+  const getDisplayValue = () => {
+    if (!styleSelected || styleSelected === "") {
+      return "Select a Style";
+    }
+    return styleSelected;
   };
 
   return (
@@ -65,16 +78,36 @@ const StyleSelector: React.FC<StyleSelectorProps> = ({ styleSelected, setStyleSe
       </div>
       <select
         id="styleSelect"
-        value={styleSelected || "Select a Style"} // Controlled component
+        value={getDisplayValue()} // Use helper function to determine display value
         onChange={handleStyleChange}
         className="shadow-sm appearance-none border border-gray-300 dark:border-gray-600 rounded-xl w-full py-4 px-4 text-lg text-gray-700 dark:text-gray-200 leading-relaxed focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent bg-gray-50 dark:bg-gray-700 transition-all duration-300"
       >
         {styleOptions.map((style, index) => (
-          <option key={index} value={style} disabled={style === "Select a Style"}>
+          <option 
+            key={index} 
+            value={style} 
+            disabled={style === "Select a Style"}
+            className={style === "None" ? "font-semibold text-red-600" : ""}
+          >
             {style}
           </option>
         ))}
       </select>
+      
+      {/* Display current selection status */}
+      {/* <div className="mt-2 text-sm text-gray-600 dark:text-gray-400">
+        {styleSelected && styleSelected !== "" ? (
+          <span className="flex items-center">
+            <span className="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
+            Current style: <strong className="ml-1">{styleSelected}</strong>
+          </span>
+        ) : (
+          <span className="flex items-center">
+            <span className="w-2 h-2 bg-gray-400 rounded-full mr-2"></span>
+            No style selected
+          </span>
+        )}
+      </div> */}
     </div>
   );
 };
