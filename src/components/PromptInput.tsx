@@ -58,8 +58,11 @@ const PromptInput = forwardRef<HTMLTextAreaElement, PromptInputProps>(({
             )}
           </button>
           <button
-            onClick={clearPrompt}
-            disabled={!prompt.trim() || anyLLMLoading}
+            onClick={() => {
+              clearPrompt();
+              setUploadedImages([]);
+            }}
+            disabled={!prompt.trim() && uploadedImages.length === 0 || anyLLMLoading}
             className="p-2 rounded-full bg-gray-300 dark:bg-gray-700 text-gray-800 dark:text-white shadow-sm hover:bg-gray-400 dark:hover:bg-gray-600 transform transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-gray-400 disabled:opacity-50 disabled:cursor-not-allowed"
             aria-label="Clear prompt"
           >
@@ -86,7 +89,13 @@ const PromptInput = forwardRef<HTMLTextAreaElement, PromptInputProps>(({
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6 text-gray-600 dark:text-gray-300"
+              className={`h-6 w-6 ${
+                uploadedImages.length === 0
+                  ? 'text-gray-600 dark:text-gray-300'
+                  : uploadedImages.length === 1
+                  ? 'text-green-600 dark:text-green-400'
+                  : 'text-red-600 dark:text-red-400'
+              }`}
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -108,7 +117,12 @@ const PromptInput = forwardRef<HTMLTextAreaElement, PromptInputProps>(({
             className="hidden"
             onChange={async (e) => {
               const files = e.target.files;
-              if (!files) return;
+              if (!files) {
+                setUploadedImages([]);
+                return;
+              }
+              // Clear previous images before adding new ones
+              setUploadedImages([]);
               const base64Images: string[] = [];
               for (let i = 0; i < files.length; i++) {
                 const file = files[i];
