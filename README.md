@@ -1,5 +1,7 @@
 # Morphica
 
+**Preview: Visit [morphica.netlify.app](https://morphica.netlify.app) for live demo**
+
 Morphica is an AI-powered image generation web application built with React and TypeScript. It allows users to create stunning images from text prompts, with advanced features such as prompt enhancement, negative prompt generation, style selection, and story generation. The app supports light and dark themes for a smooth user experience.
 
 ## Features
